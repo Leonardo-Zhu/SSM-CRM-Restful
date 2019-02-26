@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Login</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.2.1/css/bootstrap.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/login.css" th:href="@{/css/login.css}">
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Sign In</h5>
+                    <form class="form-signin" action="javascript:void(0)">
+                        <div class="form-label-group">
+                            <input type="text" id="userName" class="form-control" placeholder="User" required autofocus>
+                            <label for="userName">User</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="userPassword" class="form-control" placeholder="Password"
+                                   required>
+                            <label for="userPassword">Password</label>
+                        </div>
+
+                        <div class="custom-control custom-checkbox mb-3">
+                            <input type="checkbox" class="custom-control-input" id="customCheck1">
+                            <label class="custom-control-label" for="customCheck1">Remember password</label>
+                        </div>
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" id="login" type="submit">Sign
+                            in
+                        </button>
+                        <hr class="my-4">
+                        <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i
+                                class="fa fa-google mr-2"></i> Sign in with Google
+                        </button>
+                        <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i
+                                class="fa fa-facebook-f mr-2"></i> Sign in with Facebook
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+    $("#login").click(function () {
+        $.get("/user/check",
+            {
+                "userName": $("#userName").val(),
+                "userPassword": $("#userPassword").val()
+            },
+            function (data) {
+                if (data == 1) {
+                    window.location.href = "../system/home";
+                }
+                else {
+                    alert("用户名或密码错误");
+                }
+            })
+    });
+</script>
+</html>

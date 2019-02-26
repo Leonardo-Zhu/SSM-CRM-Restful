@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>SSM-CRM-Restful</title>
+    <link rel="stylesheet" href="../../css/global.css">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom: 0;" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">基于SSM的练习系统 &nbsp;&nbsp;v2.0</a>
+    </div>
+
+    <ul class="nav navbar-top-links navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="#userInfoDialog" data-toggle="modal"><i class="fa fa-user fa-fw"></i> 用户信息</a></li>
+                <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置中心</a></li>
+                <li class="divider"></li>
+                <li><a href="#" th:href="@{/user/logout}"><i class="fa fa-sign-out fa-fw"></i> 退出系统</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <div class="navbar-default sidebar" role="navigation">
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="sidebar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search..">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </li>
+                <li><a href="home.html" th:href="@{/system/home}"><i class="fa fa-dashboard fa-fw"></i> 系统首页</a></li>
+                <li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 分页查询<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="cust_logical.html" th:href="@{/system/customer/logical}">逻辑分页</a></li>
+                        <li><a href="cust_physical.html" th:href="@{/system/customer/physical/1}">物理分页</a></li>
+                    </ul>
+                </li>
+                <li><a href="#"><i class="fa fa-edit fa-fw"></i> 商城<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="shop_item.html" th:href="@{/system/item}">商品列表</a></li>
+                        <li><a href="shop_cart.html" th:href="@{/system/cart}">购物车</a></li>
+                        <li><a href="shop_order.html" th:href="@{/system/order}">订单</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="about.html" th:href="@{/system/about}"><i class="fa fa-question-circle-o fa-fw"
+                                                                       aria-hidden="true"></i>关于系统</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header" style="margin-top: 15px">系统首页</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-comments fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">26</div>
+                            <div>New Comments!</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-tasks fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">12</div>
+                            <div>New Tasks!</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-yellow">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-shopping-cart fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">124</div>
+                            <div>New Orders!</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-red">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-support fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">13</div>
+                            <div>Support Tickets!</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userInfoDialog" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" id="myModalLabel">用户信息</h3>
+            </div>
+            <div class="modal-body">
+                <ul class="list-unstyled">
+                    <li>
+                        <h4>用户名</h4>
+                        <h5><span id="userName" th:text="${session.user.userName}">张三</span></h5>
+                    </li>
+                    <li>
+                        <h4>用户邮箱</h4>
+                        <h5><span id="userEmail" th:text="${session.user.userEmail}">12345@qq.com</span></h5>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-center">Copyright © 2019 &nbsp;<strong style="font-family: KaiTi;">朱晓龙</strong>&nbsp;
+            <small>版权所有</small>
+        </p>
+    </div>
+</footer>
+
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+<script src="https://cdn.bootcss.com/metisMenu/1.1.3/metisMenu.js"></script>
+<script src="../../js/global.js"></script>
+</body>
+</html>

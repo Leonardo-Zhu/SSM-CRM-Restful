@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.UserMapper">
+    <insert id="addUser" parameterType="model.user.User">
+        insert into sys_user (user_name, user_password, user_email, user_state)
+        VALUES (#{userName}, #{userPassword}, #{userEmail}, 1)
+    </insert>
+
+    <update id="retrieveUser" parameterType="model.user.User">
+        update sys_user
+        set user_state = 1
+        where user_name = #{userName}
+    </update>
+
+    <select id="checkUser" parameterType="model.user.User" resultType="model.user.User">
+        select user_password,user_state
+        from sys_user
+        where user_name = #{userName}
+    </select>
+
+    <select id="userInfo" parameterType="string" resultType="model.user.User">
+        select *
+        from sys_user
+        where user_name = #{userName}
+    </select>
+
+    <update id="deleteUser" parameterType="model.user.User">
+        update sys_user
+        set user_state = 0
+        where user_name = #{userName}
+    </update>
+
+
+</mapper>

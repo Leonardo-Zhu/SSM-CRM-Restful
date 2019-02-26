@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SSM-CRM-Restful</title>
+    <link rel="stylesheet" href="../../css/global.css">
+    <style>
+        input[type=checkbox] {
+            cursor: pointer;
+        }
+
+        #page-wrapper .panel-body .row .col-lg-5 a {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        #page-wrapper .panel-body .row .col-lg-5 a:hover {
+            color: #E2231A;
+            text-decoration: none;
+        }
+
+        #total {
+            font-size: 16px;
+            color: #E2231A;
+            font-weight: 700;
+            font-family: verdana;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom: 0;" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">基于SSM的练习系统 &nbsp;&nbsp;v2.0</a>
+    </div>
+
+    <ul class="nav navbar-top-links navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="#userInfoDialog" data-toggle="modal"><i class="fa fa-user fa-fw"></i> 用户信息</a></li>
+                <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置中心</a></li>
+                <li class="divider"></li>
+                <li><a href="#" th:href="@{/user/logout}"><i class="fa fa-sign-out fa-fw"></i> 退出系统</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <div class="navbar-default sidebar" role="navigation">
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="sidebar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search..">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </li>
+                <li><a href="home.html" th:href="@{/system/home}"><i class="fa fa-dashboard fa-fw"></i> 系统首页</a></li>
+                <li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 分页查询<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="cust_logical.html" th:href="@{/system/customer/logical}">逻辑分页</a></li>
+                        <li><a href="cust_physical.html" th:href="@{/system/customer/physical/1}">物理分页</a></li>
+                    </ul>
+                </li>
+                <li><a href="#"><i class="fa fa-edit fa-fw"></i> 商城<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="shop_item.html" th:href="@{/system/item}">商品列表</a></li>
+                        <li><a href="shop_cart.html" th:href="@{/system/cart}">购物车</a></li>
+                        <li><a href="shop_order.html" th:href="@{/system/order}">订单</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="about.html" th:href="@{/system/about}"><i class="fa fa-question-circle-o fa-fw"
+                                                                       aria-hidden="true"></i>关于系统</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header" style="margin-top: 15px">购物车</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="checkbox col-lg-1">
+                            <label>
+                                <input type="checkbox" id="selectAll">全选
+                            </label>
+                        </div>
+                        <div class="col-lg-5 text-center" style="margin: 10px 0 10px"><span>商品</span></div>
+                        <div class="col-lg-1 text-right" style="margin: 10px 0 10px"><span>单价</span></div>
+                        <div class="col-lg-2 text-right" style="margin: 10px 0 10px"><span>数量</span></div>
+                        <div class="col-lg-2 text-right" style="margin: 10px 0 10px"><span>小计</span></div>
+                        <div class="col-lg-1 text-right" style="margin: 10px 0 10px"><span>操作</span></div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row" th:each="ci:${cartItems}"
+                         style="padding-bottom: 10px;margin-bottom:10px;border-bottom:1px #ddd solid">
+                        <div class="checkbox pull-left" style="padding-left: 15px">
+                            <label>
+                                <input type="checkbox">
+                            </label>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="row">
+                                <label hidden>
+                                    <input name="itemId" value="1" th:value="${ci.item.itemId}">
+                                </label>
+                                <div class="col-lg-3">
+                                    <img src="http://placehold.it/80x80" alt="">
+                                </div>
+                                <div class="col-lg-5" style="padding-left: 0;">
+                                    <a href="shop_itemInfo.html" th:href="@{'/system/itemInfo/'+${ci.item.itemId}}">
+                                        <span th:text="${ci.item.itemName}">Apple iPhone X (A1865) 64GB 深空灰色 移动联通电信4G手机</span>
+                                    </a>
+                                </div>
+                                <div class="col-lg-4">
+                                    <ul class="list-unstyled">
+                                        <li>颜色</li>
+                                        <li>型号</li>
+                                        <li>尺码</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-1 text-center" style="margin:0 60px">￥<span
+                                th:text="${#numbers.formatDecimal(ci.item.marketPrice,0,2)}">100</span>
+                        </div>
+                        <div class="col-lg-2 text-right">
+                            <button type="button" class="btn btn-default pull-left" onclick="decreaseNum(this)"
+                                    th:onclick="'javascript:decreaseNum(this,'+${session.user.userId}+','+${ci.item.itemId}+')'">
+                                -
+                            </button>
+                            <label class="pull-left">
+                                <input type="text" name="itemNum" class="form-control" value="2"
+                                       th:value="${ci.itemNum}" style="width: 6rem; text-align: center">
+                            </label>
+                            <button type="button" class="btn btn-default pull-left" onclick="increaseNum(this)"
+                                    th:onclick="'javascript:increaseNum(this,'+${session.user.userId}+','+${ci.item.itemId}+')'">
+                                +
+                            </button>
+
+                        </div>
+                        <div class="col-lg-1 text-right" style="margin-left: 20px"><strong
+                                th:text="'￥'+${#numbers.formatDecimal(ci.item.marketPrice*ci.itemNum,0,2)}">￥200</strong>
+                        </div>
+                        <div class="col-lg-1 text-right">
+                            <a href="#"
+                               th:href="'javascript:removCartItem('+${session.user.userId}+','+${ci.item.itemId}+')'">删除</a>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                        </div>
+                        <div class="col-lg-6 text-right">
+                            <ul class="list-inline">
+                                <li>
+                                    <small>已选择 <em style="color: #E2231A" id="totalNum">3</em> 件商品</small>
+                                </li>
+                                <li>
+                                    <small>总价：</small>
+                                    <strong id="total">￥6999</strong>
+                                </li>
+                                <li>
+                                    <button type="button" class="btn btn-danger" id="settle">去结算</button>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userInfoDialog" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" id="myModalLabel">用户信息</h3>
+            </div>
+            <div class="modal-body">
+                <ul class="list-unstyled">
+                    <li>
+                        <h4>用户名</h4>
+                        <h5><span id="userName" th:text="${session.user.userName}">张三</span></h5>
+                    </li>
+                    <li>
+                        <h4>用户邮箱</h4>
+                        <h5><span id="userEmail" th:text="${session.user.userEmail}">12345@qq.com</span></h5>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-center">Copyright © 2019 &nbsp;<strong style="font-family: KaiTi;">朱晓龙</strong>&nbsp; <small>版权所有</small></p>
+    </div>
+</footer>
+
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+<script src="https://cdn.bootcss.com/metisMenu/1.1.3/metisMenu.js"></script>
+<script src="../../js/global.js"></script>
+<script>
+    $(function () {
+        showTotal();
+        $("#selectAll").click(function () {
+            $(".panel-body input:checkbox").prop("checked", this.checked);
+            showTotal();
+        });
+        $(".panel-body input:checkbox").click(function () {
+            $("#selectAll").prop("checked", $(".panel-body input:checkbox").length === $(".panel-body input:checkbox").filter(":checked").length);
+            showTotal();
+        });
+    });
+
+    function showTotal() {
+        let total = 0;
+        let totalNum = 0;
+        $(".panel-body input:checkbox").each(function () {
+            if ($(this).prop("checked")) {
+                total += Number($(this).parents(".panel-body .row").find("strong").text().replace("￥", ""));
+                totalNum += Number($(this).parents(".panel-body .row").find("input[name='itemNum']").val());
+            }
+        });
+        $("#total").text('￥' + total.toFixed(2));
+        $("#totalNum").text(totalNum);
+    }
+
+    function decreaseNum(tag, userId, itemId) {
+        let itemMarketPrice = $(tag).parent().prev().children().text();
+        let itemNumInput = $(tag).next().children();
+        let itemSubtotalInput = $(tag).parent().next().children();
+        if (itemNumInput.val() > 1) {
+            itemNumInput.val(itemNumInput.val() - 1);
+            itemSubtotalInput.text((itemMarketPrice * itemNumInput.val()).toFixed(2));
+            showTotal();
+            $.post("../system/cart/itemNumChanged",
+                {
+                    "userId": userId,
+                    "item.itemId": itemId,
+                    "itemNum": parseInt(itemNumInput.val())
+                }, function (data) {
+                });
+        } else {
+            return false;
+        }
+    }
+
+    function increaseNum(tag, userId, itemId) {
+        let itemMarketPrice = $(tag).parent().prev().children().text();
+        let itemNumInput = $(tag).prev().children();
+        let itemSubtotalInput = $(tag).parent().next().children();
+        itemNumInput.val(parseInt(itemNumInput.val()) + 1);
+        itemSubtotalInput.text((itemMarketPrice * itemNumInput.val()).toFixed(2));
+        showTotal();
+        $.post("../system/cart/itemNumChanged",
+            {
+                "userId": userId,
+                "item.itemId": itemId,
+                "itemNum": parseInt(itemNumInput.val())
+            }, function (data) {
+            });
+    }
+
+    function removCartItem(userId, itemId) {
+        $.post("../system/cart/removeItem", {"userId": userId, "item.itemId": itemId}, function () {
+            window.location.reload();
+        })
+    }
+</script>
+<script th:inline="javascript">
+    $("#settle").click(function () {
+        let orderItems = [];
+        $(".panel-body input:checkbox:checked").each(function () {
+            let itemId = $(this).parents(".panel-body .row").find("input[name='itemId']").val();
+            let itemNum = $(this).parents(".panel-body .row").find("input[name='itemNum']").val();
+            let subtotal = $(this).parents(".panel-body .row").find("strong").text().replace("￥", "");
+            orderItems.push({itemId: itemId, itemNum: itemNum, subtotal: subtotal});
+        });
+        $.post({
+            url: "../system/cart/settle",
+            data: JSON.stringify(orderItems),
+            contentType: "application/json",
+            success: function () {
+                window.location.href = "../system/settle";
+            }
+        });
+    });
+</script>
+</body>
+</html>

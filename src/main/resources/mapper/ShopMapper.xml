@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.ShopMapper">
+    <select id="findAllItems" resultType="model.shop.Item">
+        select item_id, item_name, market_price
+        from shop_item
+    </select>
+
+    <select id="findItemByItemId" parameterType="integer" resultType="model.shop.Item">
+        select item_id, item_name, market_price
+        from shop_item
+        where item_id = #{itemId}
+    </select>
+
+    <select id="findCartItemsByUserId" parameterType="integer" resultType="model.shop.Cart">
+        select i.item_id      as "item.itemId",
+               i.item_name    as "item.itemName",
+               i.market_price as "item.marketPrice",
+               c.item_num
+        from sys_user u
+                 join shop_cart c on u.user_id = c.user_id
+                 join shop_item i on c.item_id = i.item_id
+        where u.user_id = #{userId}
+    </select>
+
+    <insert id="addItemToCart" parameterType="model.shop.Cart">
+        insert into shop_cart
+        values (#{userId}, #{item.itemId}, #{itemNum})
+    </insert>
+
+    <select id="hasItemByUserId" parameterType="model.shop.Cart" resultType="model.shop.Cart">
+        select item_num
+        from shop_cart
+        where user_id = #{userId}
+          and item_id = #{item.itemId}
+    </select>
+
+    <update id="addCartItemNum" parameterType="model.shop.Cart">
+        update shop_cart
+        set item_num = item_num + #{itemNum}
+        where user_id = #{userId}
+          and item_id = #{item.itemId}
+    </update>
+
+    <update id="updateItemNum" parameterType="model.shop.Cart">
+        update shop_cart
+        set item_num = #{itemNum}
+        where user_id = #{userId}
+          and item_id = #{item.itemId}
+    </update>
+
+    <delete id="removeCartItemByCart" parameterType="model.shop.Cart">
+        delete
+        from shop_cart
+        where user_id = #{userId}
+          and item_id = #{item.itemId}
+    </delete>
+
+    <select id="findAreas" resultType="model.shop.Area">
+        select area_id, area_name, area_parent_id
+        from dt_area
+        where area_parent_id = #{area_id}
+    </select>
+
+    <insert id="addOrderItem" parameterType="model.shop.OrderItem">
+        insert into shop_order_item
+        values (#{itemId}, #{itemNum}, #{subtotal}, #{orderId})
+    </insert>
+
+    <insert id="createOrder" parameterType="model.shop.Order">
+        insert into shop_order
+        values (#{orderId}, #{createTime}, #{total}, #{state}, #{address}, #{consigneeName}, #{phone}, #{user.userId})
+    </insert>
+
+    <delete id="removeCartItemByOrder" parameterType="integer">
+        delete
+        from shop_cart
+        where user_id = #{userId}
+          and item_id = #{itemId}
+    </delete>
+
+    <select id="findOrdersByUserId" resultType="model.shop.Order">
+        select order_id,
+               create_time,
+               total,
+               state,
+               address,
+               consignee_name,
+               phone
+        from shop_order
+        where user_id = #{userId}
+    </select>
+
+    <select id="findUnPaidOrdersByUserId" resultType="model.shop.Order">
+        select order_id,
+               create_time,
+               total,
+               state,
+               address,
+               consignee_name,
+               phone
+        from shop_order
+        where user_id = #{userId}
+          and state = 0
+    </select>
+
+    <select id="findUnReceivedOrdersByUserId" resultType="model.shop.Order">
+        select order_id,
+               create_time,
+               total,
+               state,
+               address,
+               consignee_name,
+               phone
+        from shop_order
+        where user_id = #{userId}
+          and state = 1
+    </select>
+
+    <select id="findOrderItemsByOrderId" resultType="model.shop.OrderItem">
+        select oi.item_id,
+               oi.item_num,
+               oi.subtotal,
+               i.item_id      as "item.itemId",
+               i.item_name    as "item.itemName",
+               i.market_price as "item.marketPrice"
+        from shop_order_item oi
+                 left join shop_item i on oi.item_id = i.item_id
+        where oi.order_id = #{orderId}
+    </select>
+
+
+</mapper>

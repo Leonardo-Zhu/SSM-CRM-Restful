@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SSM-CRM-Restful</title>
+    <link rel="stylesheet" href="../../css/global.css">
+    <style>
+        .ftx {
+            position: absolute;
+            right: 130px;
+        }
+
+        .list-unstyled {
+            font-size: 12px;
+        }
+
+        strong {
+            color: #e4393c;
+            font-family: Verdana;
+            font-weight: 700;
+            font-size: 18px;
+
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom: 0;" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">基于SSM的练习系统 &nbsp;&nbsp;v2.0</a>
+    </div>
+
+    <ul class="nav navbar-top-links navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="#userInfoDialog" data-toggle="modal"><i class="fa fa-user fa-fw"></i> 用户信息</a></li>
+                <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置中心</a></li>
+                <li class="divider"></li>
+                <li><a href="#" th:href="@{/user/logout}"><i class="fa fa-sign-out fa-fw"></i> 退出系统</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <div class="navbar-default sidebar" role="navigation">
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="sidebar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search..">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </li>
+                <li><a href="home.html" th:href="@{/system/home}"><i class="fa fa-dashboard fa-fw"></i> 系统首页</a></li>
+                <li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 分页查询<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="cust_logical.html" th:href="@{/system/customer/logical}">逻辑分页</a></li>
+                        <li><a href="cust_physical.html" th:href="@{/system/customer/physical/1}">物理分页</a></li>
+                    </ul>
+                </li>
+                <li><a href="#"><i class="fa fa-edit fa-fw"></i> 商城<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="shop_item.html" th:href="@{/system/item}">商品列表</a></li>
+                        <li><a href="shop_cart.html" th:href="@{/system/cart}">购物车</a></li>
+                        <li><a href="shop_order.html" th:href="@{/system/order}">订单</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="about.html" th:href="@{/system/about}"><i class="fa fa-question-circle-o fa-fw"
+                                                                       aria-hidden="true"></i>关于系统</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header" style="margin-top: 15px">结算页</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">填写核对订单信息</h3>
+                </div>
+                <div class="panel-body" style="height: auto">
+                    <legend>收货人信息</legend>
+                    <div class="row">
+                        <div class="col-lg-2" id="consigneeName">
+                            <!--<a href="javascript:void(0)" class="btn btn-info disabled" style="width: 16rem;">consigneeName</a>-->
+                        </div>
+                        <div class="col-lg-8" style="padding-top: 8px">
+                            <address>
+
+                            </address>
+                        </div>
+                        <div class="col-lg-2" style="position: absolute;right: -15px;top: 65px">
+                            <a href="#" data-toggle="modal" data-target="#myModal">新增收货人地址</a>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        &times;
+                                    </button>
+                                    <h4 class="modal-title">新增收货人地址</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="javascript:void(0)" id="consigneeForm" class="form-horizontal"
+                                          role="form">
+                                        <div class="form-group">
+                                            <label for="consignee" class="col-sm-2 control-label">收货人</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="consignee">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="phone" class="col-sm-2 control-label">手机号码</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="phone">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">所在地区</label>
+                                            <div class="col-sm-10">
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <label for="province" class="sr-only"></label>
+                                                        <select class="form-control" id="province">
+                                                            <option value=""> -- 省份 --</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label for="city" class="sr-only"></label>
+                                                        <select class="form-control" id="city">
+                                                            <option value=""> -- 城市 --</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label for="town" class="sr-only"></label>
+                                                        <select class="form-control" id="town">
+                                                            <option value=""> -- 区县 --</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="detailed" class="col-sm-2 control-label">详细地址</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" id="detailed" rows="3"
+                                                          placeholder="详细地址：如道路、门牌号、小区、楼栋号、单元室等"></textarea>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" id="addConsignee" data-dismiss="modal">
+                                        保存收货人信息
+                                    </button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+
+                    <div class="" style="margin-top: 20px">
+                        <legend>支付方式</legend>
+                        <div>
+                            <label class="radio-inline">
+                                <input type="radio" name="pay" id="aliPay" value="" checked>
+                                支付宝
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="pay" id="wechatPay" value="">
+                                微信支付
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="pay" id="bankCard" value="">
+                                银行卡
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="" style="margin-top: 30px">
+                        <legend>送货清单</legend>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">配送方式</h3>
+                                    </div>
+                                    <div class="panel-body" style="padding-top: 5px">
+                                        <a href="#" class="btn btn-default disabled" role="button">自配送</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="row"
+                                     style="padding-bottom: 10px;margin-bottom:10px;border-bottom:1px #ddd solid"
+                                     th:each="oi:${session.orderItems}">
+                                    <label hidden>
+                                        <input name="itemId" value="1" th:value="${oi.itemId}">
+                                    </label>
+                                    <div class="col-lg-2">
+                                        <img src="http://placehold.it/80x80" alt="">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <a href="shop_itemInfo.html" th:href="@{'/system/itemInfo/'+${oi.itemId}}">
+                                            <span th:text="${oi.item.itemName}">Apple iPhone X (A1865) 64GB 深空灰色 移动联通电信4G手机</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <ul class="list-unstyled">
+                                            <li>颜色</li>
+                                            <li>型号</li>
+                                            <li>尺码</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-lg-2"> ￥<span
+                                            th:text="${oi.item.marketPrice}">200</span>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        x<span th:text="${oi.itemNum}">1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 text-right">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <span class="ftx">
+                                        <em style="color: #e4393c">1</em>
+                                        件商品，总商品金额：
+                                    </span>
+                                    <span class="total">
+                                        ￥1000.00
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="ftx" style="top: 16px">运费：</span>
+                                    <span>
+                                        ￥0.00
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="ftx" style="bottom: 10px">商品优惠：</span>
+                                    <span>-￥0.00</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row" style="border-top: 1px solid #e6e6e6;background-color: #f4f4f4">
+                        <div class="col-lg-12 text-right">
+                            <ul class="list-unstyled">
+                                <li style="margin-top: 10px">
+                                    <span class="ftx" style="top: 1.5rem;">
+                                        应付总额：
+                                    </span>
+                                    <strong class="total">￥6999.00</strong>
+                                </li>
+                                <li style="margin-top: 10px">
+                                    <address>
+                                        <small>
+                                        </small>
+                                    </address>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 1rem">
+                        <div class="col-lg-12 text-right">
+                            <button type="button" class="btn btn-danger" id="settle">提交订单</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userInfoDialog" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title" id="myModalLabel">用户信息</h3>
+            </div>
+            <div class="modal-body">
+                <ul class="list-unstyled">
+                    <li>
+                        <h4>用户名</h4>
+                        <h5><span id="userName" th:text="${session.user.userName}">张三</span></h5>
+                    </li>
+                    <li>
+                        <h4>用户邮箱</h4>
+                        <h5><span id="userEmail" th:text="${session.user.userEmail}">12345@qq.com</span></h5>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-center">Copyright © 2019 &nbsp;<strong style="font-family: KaiTi;">朱晓龙</strong>&nbsp;
+            <small>版权所有</small>
+        </p>
+    </div>
+</footer>
+
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+<script src="https://cdn.bootcss.com/metisMenu/1.1.3/metisMenu.js"></script>
+<script src="../../js/global.js"></script>
+<script>
+    $(function () {
+        $.get("../system/settle/area", {"areaId": 0},
+            function (data) {
+                if (data != null) {
+                    $(data).each(function () {
+                        $("#province").append($("<option value=" + this.areaId + ">" + this.areaName + "</option>"))
+                    })
+                }
+            }, "json");
+
+        $("#province").change(function () {
+            let provinceId = $(this).val();
+            $.get("../system/settle/area", {"areaId": provinceId},
+                function (data) {
+                    $("#city").html("<option value=\"\"> -- 城市 --</option>");
+                    if (data != null) {
+                        $(data).each(function () {
+                            $("#city").append($("<option value=" + this.areaId + ">" + this.areaName + "</option>"))
+                        })
+                    }
+                }, "json")
+        });
+
+        $("#city").change(function () {
+            let cityId = $(this).val();
+            $.get("../system/settle/area", {"areaId": cityId},
+                function (data) {
+                    $("#town").html("<option value=\"\"> -- 区县 --</option>");
+                    if (data != null) {
+                        $(data).each(function () {
+                            $("#town").append($("<option value=" + this.areaId + ">" + this.areaName + "</option>"))
+                        })
+                    }
+                }, "json")
+        });
+    })
+</script>
+<script th:inline="javascript">
+    let orderItems = [[${session.orderItems}]];
+    let total = 0;
+    let orderItemsNum = 0;
+
+    $(orderItems).each(function () {
+        total += this.subtotal;
+        orderItemsNum += this.itemNum;
+    });
+    $(".total").each(function () {
+        $(this).text("￥" + total.toFixed(2));
+    });
+    $("em").text(orderItemsNum);
+
+    let consigneeName;
+    let phone;
+    let province;
+    let city;
+    let town;
+    let detailed;
+    let consigneeInfo;
+    $("#addConsignee").click(function () {
+        consigneeName = $("#consignee").val();
+        phone = $("#phone").val();
+        province = $("#province").find("option:selected").text();
+        city = $("#city").find("option:selected").text();
+        town = $("#town").find("option:selected").text();
+        detailed = $("#detailed").val();
+        consigneeInfo = province + "&nbsp;" + city + "&nbsp;" + town + "&nbsp;" + detailed + "&nbsp;" + phone;
+
+        $("#consigneeName").append("<a href=\"javascript:void(0)\" class=\"btn btn-info disabled\" style=\"width: 16rem;\">" + consigneeName + "</a>");
+        $("address:first").html(consigneeInfo);
+        $("address small").html("寄送至：&nbsp" + consigneeInfo);
+    });
+
+    $("#settle").click(function () {
+        let address = province + city + town + detailed;
+        $.post({
+            url: "../system/settle/submit",
+            data: JSON.stringify(
+                {
+                    total: total,
+                    address: address,
+                    consigneeName: consigneeName,
+                    phone: phone,
+                    orderItems: orderItems
+                }),
+            contentType: "application/json",
+            success: function () {
+                window.location.href = "../system/order";
+            }
+        })
+    });
+</script>
+</body>
+</html>
