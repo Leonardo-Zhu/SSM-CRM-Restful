@@ -4,6 +4,8 @@
 
 系统分为**登录**模块，**注册**模块，**分页查询**子项目，**网上商城**子项目
 
+[基于SSM的练习系统.md](https://github.com/Leonardo-Zhu/SSM-CRM-Restful/blob/master/基于SSM的练习系统.md)
+
 ## 技术栈
 
 - Spring
